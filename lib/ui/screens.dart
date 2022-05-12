@@ -4,3 +4,7 @@ export 'signin.dart';
 export 'signin.dart';
 export 'signup.dart';
 export 'splash.dart';
+export 'personal_info.dart';
+export 'signin_info.dart';
+export 'more_info.dart';
+export 'error.dart';

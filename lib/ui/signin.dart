@@ -1,25 +1,19 @@
-import 'package:app/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
+import '../app_state/signin_state.dart';
+import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
 class SignInScreen extends StatelessWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: AppScreens.signin,
-      key: ValueKey(AppScreens.signin),
-      child: const SignInScreen(),
-    );
-  }
-
-  final String? username;
+  final String? email;
   final String? password;
 
   const SignInScreen({
     Key? key,
-    this.username,
+    this.email,
     this.password,
   }) : super(key: key);
 
@@ -38,23 +32,21 @@ class SignInScreen extends StatelessWidget {
                 child: FlutterLogo(),
               ),
               const SizedBox(height: 16),
-              buildTextfield(username ?? 'Enter username'),
+              buildTextfield(email ?? 'Enter email'),
               const SizedBox(height: 16),
               buildTextfield('Enter password'),
               const SizedBox(height: 16),
               buildButton(
                 context,
                 'Sign In',
-                () => Provider.of<AppStateManager>(context, listen: false)
-                    .login("username", "password"),
+                () => signInUser(context),
               ),
               const SizedBox(height: 16),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 const Text("Don't have an account yet!"),
                 TextButton(
                   onPressed: () => {
-                    Navigator.pushNamed(context, AppScreens.signup),
-                    print('---Navigate to signup---')
+                    context.goNamed(AppScreens.signUp),
                   },
                   child: const Text("SignUp",
                       style: TextStyle(color: Colors.blue)),
@@ -65,5 +57,9 @@ class SignInScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void signInUser(BuildContext context) {
+    Provider.of<AppState>(context, listen: false).signInState = true;
   }
 }

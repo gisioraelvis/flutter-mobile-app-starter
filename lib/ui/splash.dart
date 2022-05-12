@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
-import '../navigation/routes.dart';
 
 class SplashScreen extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-        key: ValueKey(AppScreens.splash),
-        name: AppScreens.splash,
-        child: const SplashScreen());
-  }
-
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -20,10 +11,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //late AppState _appState;
+
+  // @override
+  // void initState() {
+  //   _appState = Provider.of<AppState>(context, listen: false);
+  //   onStartUp();
+  //   super.initState();
+  // }
+  //
+  // void onStartUp() async {
+  //   await _appState.onAppStart();
+  // }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Provider.of<AppStateManager>(context, listen: false).initializeApp();
+    Provider.of<AppState>(context, listen: false).initializeApp();
+    print('---SplashScreen didChangeDependencies---');
   }
 
   @override

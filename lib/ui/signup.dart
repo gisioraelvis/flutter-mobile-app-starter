@@ -1,25 +1,19 @@
-import 'package:app/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
+import '../app_state/signin_state.dart';
+import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: AppScreens.signup,
-      key: ValueKey(AppScreens.signup),
-      child: const SignUpScreen(),
-    );
-  }
-
-  final String? username;
+  final String? email;
   final String? password;
 
   const SignUpScreen({
     Key? key,
-    this.username,
+    this.email,
     this.password,
   }) : super(key: key);
 
@@ -47,10 +41,7 @@ class SignUpScreen extends StatelessWidget {
               buildButton(
                 context,
                 "Sign up",
-                () => {
-                  Provider.of<AppStateManager>(context, listen: false)
-                      .login('mockUsername', 'mockPassword')
-                },
+                () => signUpUser(context),
               ),
               const SizedBox(height: 16),
               Row(
@@ -58,8 +49,9 @@ class SignUpScreen extends StatelessWidget {
                 children: [
                   const Text("Already have an account?"),
                   TextButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppScreens.signin),
+                    onPressed: () => {
+                      context.goNamed(AppScreens.signIn),
+                    },
                     child: const Text("SignIn",
                         style: TextStyle(color: Colors.blue)),
                   )
@@ -70,5 +62,9 @@ class SignUpScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void signUpUser(BuildContext context) {
+    Provider.of<AppState>(context, listen: false).signInState = true;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -6,14 +7,6 @@ import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      key: ValueKey(AppScreens.onboarding),
-      name: AppScreens.onboarding,
-      child: const OnboardingScreen(),
-    );
-  }
-
   const OnboardingScreen({Key? key}) : super(key: key);
 
   @override
@@ -30,38 +23,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text('Get Started'),
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.chevron_left,
-            size: 35,
-          ),
-          onTap: () {
-            Navigator.pop(context, true);
-          },
-        ),
       ),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(child: onBoardingScreens()),
             scrollIndicators(),
-            actionButtons(),
+            actionButtons(context),
           ],
         ),
       ),
     );
   }
 
-  Widget actionButtons() {
+  Widget actionButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         MaterialButton(
           child: const Text('Skip'),
           onPressed: () {
-            Provider.of<AppStateManager>(context, listen: false)
-                .completeOnboarding();
+            Provider.of<AppState>(context, listen: false).onboarding = true;
+            context.goNamed(AppScreens.signUp);
           },
         ),
       ],

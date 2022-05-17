@@ -22,21 +22,21 @@ class AppState with ChangeNotifier {
   }
 
   set onboarding(bool value) {
-    sharedPreferences.setBool(onboardingKey, value);
+    sharedPreferences.setBool(ONBOARDING_KEY, value);
     _onboarding = value;
     notifyListeners();
   }
 
   set signInState(bool state) {
-    sharedPreferences.setBool(loginKey, state);
+    sharedPreferences.setBool(SIGNIN_KEY, state);
     _signInState = state;
     print("----set signInState: $state ----");
     notifyListeners();
   }
 
   Future<void> onAppStart() async {
-    _onboarding = sharedPreferences.getBool(onboardingKey) ?? false;
-    _signInState = sharedPreferences.getBool(loginKey) ?? false;
+    _onboarding = sharedPreferences.getBool(ONBOARDING_KEY) ?? false;
+    _signInState = sharedPreferences.getBool(SIGNIN_KEY) ?? false;
 
     print("---initialized: $_initialized---");
     print("---onboarding: $_onboarding---");

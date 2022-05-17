@@ -86,12 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.only(right: 16.0),
       child: GestureDetector(
         child: CircleAvatar(
+          // faded grey color
           backgroundColor: Colors.grey,
           // display the username initials else person icon
           child: IconButton(
             icon: const Icon(Icons.person, color: Colors.blue),
             onPressed: () => {
-              context.goNamed(AppScreens.profile),
+              context.pushNamed(AppScreens.account),
             },
           ),
         ),

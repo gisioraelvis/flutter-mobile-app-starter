@@ -41,7 +41,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         MaterialButton(
-          child: const Text('Skip'),
+          child: Row(
+            children: const <Widget>[
+              Icon(Icons.check),
+              Text('Done'),
+            ],
+          ),
           onPressed: () {
             Provider.of<AppState>(context, listen: false).onboarding = true;
             context.goNamed(AppScreens.signUp);
@@ -56,35 +61,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       controller: controller,
       children: [
         onboardPageView(
-          const AssetImage("assets/recommend.png"),
           'Welcome onboard!!!!',
+          const AssetImage("assets/recommend.png"),
         ),
         onboardPageView(
-            const AssetImage('assets/list.png'), 'Onboarding screen'),
+          'Onboarding screen',
+          const AssetImage('assets/list.png'),
+        ),
         onboardPageView(
-            const AssetImage('assets/sheet.png'), 'Another onboarding screen'),
+          'Another onboarding screen',
+          const AssetImage('assets/sheet.png'),
+        ),
       ],
     );
   }
 
-  Widget onboardPageView(ImageProvider imageProvider, String text) {
+  Widget onboardPageView(String text, ImageProvider imageProvider) {
     return Padding(
       padding: const EdgeInsets.all(40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(
+            text,
+            style: const TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
           Expanded(
             child: Image(
               fit: BoxFit.fitWidth,
               image: imageProvider,
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
         ],

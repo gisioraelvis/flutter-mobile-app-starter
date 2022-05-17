@@ -59,26 +59,44 @@ class AppRouter {
       ),
       // Home route and children
       GoRoute(
-          name: AppScreens.home,
-          // 1
-          path: '/home/:tab(home|screen1|screen2)',
-          pageBuilder: (context, state) {
-            // 2
-            final tab = state.params['tab']!;
-            return MaterialPage<void>(
-              key: state.pageKey,
-              // 3
-              child: HomeScreen(tab: tab),
-            );
-          },
-          routes: []),
+        name: AppScreens.home,
+        // 1
+        path: '/home/:tab(home|screen1|screen2)',
+        pageBuilder: (context, state) {
+          // 2
+          final tab = state.params['tab']!;
+          return MaterialPage<void>(
+            key: state.pageKey,
+            // 3
+            child: HomeScreen(tab: tab),
+          );
+        },
+      ),
       GoRoute(
-        name: AppScreens.profile,
-        path: '/profile',
+        name: AppScreens.account,
+        path: '/account',
         pageBuilder: (context, state) => MaterialPage<void>(
           key: state.pageKey,
-          child: const ProfileScreen(),
+          child: const AccountScreen(),
         ),
+        routes: [
+          GoRoute(
+            name: AppScreens.profile,
+            path: 'profile',
+            pageBuilder: (context, state) => MaterialPage<void>(
+              key: state.pageKey,
+              child: const ProfileScreen(),
+            ),
+          ),
+          GoRoute(
+            name: AppScreens.settings,
+            path: 'settings',
+            pageBuilder: (context, state) => MaterialPage<void>(
+              key: state.pageKey,
+              child: const SettingsScreen(),
+            ),
+          ),
+        ],
       ),
       // forwarding routes to remove the need to put the 'tab' param in the code
       GoRoute(

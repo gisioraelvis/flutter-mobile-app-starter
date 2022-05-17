@@ -8,3 +8,4 @@ export 'personal_info.dart';
 export 'signin_info.dart';
 export 'more_info.dart';
 export 'error.dart';
+export 'profile.dart';

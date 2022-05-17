@@ -47,6 +47,7 @@ class SignInScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () => {
                     context.goNamed(AppScreens.signUp),
+                    print('---redirecting to signup from signin---')
                   },
                   child: const Text("SignUp",
                       style: TextStyle(color: Colors.blue)),

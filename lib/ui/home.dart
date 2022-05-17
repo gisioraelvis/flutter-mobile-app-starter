@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../navigation/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   final int index;
@@ -12,11 +15,12 @@ class HomeScreen extends StatefulWidget {
 
   static int indexFrom(String tab) {
     switch (tab) {
-      case 'cart':
+      case 'home':
+        return 0;
+      case 'screen1':
         return 1;
-      case 'profile':
+      case 'screen2':
         return 2;
-      case 'shopping':
       default:
         return 0;
     }
@@ -42,39 +46,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.lightBlue,
-        title: const Text(
-          'Navigator',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+        title: Text(
+          'Flutter App',
+          style: Theme.of(context).textTheme.headline6,
         ),
+        actions: [
+          profileButton(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+              icon: Icon(Icons.looks_one), label: 'Screen1'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.looks_two), label: 'screen2'),
         ],
-        backgroundColor: Colors.blue,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
-            // Adds Switch
-            switch (index) {
-              case 0:
-                context.go('/shop');
-                break;
-              case 1:
-                context.go('/cart');
-                break;
-              case 2:
-                context.go('/profile');
-                break;
-            }
           });
         },
       ),
@@ -85,6 +77,28 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(color: Colors.blue),
           Container(color: Colors.red),
         ],
+      ),
+    );
+  }
+
+  Widget profileButton() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: GestureDetector(
+        child: CircleAvatar(
+          backgroundColor: Colors.grey,
+          // display the username initials else person icon
+          child: IconButton(
+            icon: const Icon(Icons.person, color: Colors.blue),
+            onPressed: () => {
+              context.goNamed(AppScreens.profile),
+            },
+          ),
+        ),
+        onTap: () {
+          // Provider.of<ProfileManager>(context, listen: false)
+          //     .tapOnProfile(true);
+        },
       ),
     );
   }

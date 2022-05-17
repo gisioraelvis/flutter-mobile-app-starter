@@ -11,24 +11,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  //late AppState _appState;
-
-  // @override
-  // void initState() {
-  //   _appState = Provider.of<AppState>(context, listen: false);
-  //   onStartUp();
-  //   super.initState();
-  // }
-  //
-  // void onStartUp() async {
-  //   await _appState.onAppStart();
-  // }
+  late AppState _appState;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Provider.of<AppState>(context, listen: false).initializeApp();
-    print('---SplashScreen didChangeDependencies---');
+  void initState() {
+    _appState = Provider.of<AppState>(context, listen: false);
+    onStartUp();
+    super.initState();
+  }
+
+  void onStartUp() async {
+    await _appState.onAppStart();
   }
 
   @override

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../app_state/app_state_manager.dart';
-import '../app_state/signin_state.dart';
-import '../app_state/onboarding_state.dart';
 import 'routes.dart';
 import '../ui/screens.dart';
 
@@ -25,7 +23,7 @@ class AppRouter {
         path: '/',
         redirect: (state) =>
             // Change to Home Route
-            state.namedLocation(AppScreens.home, params: {'tab': 'shop'}),
+            state.namedLocation(AppScreens.home, params: {'tab': 'home'}),
       ),
       GoRoute(
         name: AppScreens.splash,
@@ -61,87 +59,43 @@ class AppRouter {
       ),
       // Home route and children
       GoRoute(
-        name: AppScreens.home,
-        // 1
-        path: '/home/:tab(shop|cart|profile)',
-        pageBuilder: (context, state) {
-          // 2
-          final tab = state.params['tab']!;
-          return MaterialPage<void>(
-            key: state.pageKey,
-            // 3
-            child: HomeScreen(tab: tab),
-          );
-        },
-        routes: [
-          /*GoRoute(
-            name: AppScreens.profilePersonal,
-            path: 'personal',
-            pageBuilder: (context, state) => MaterialPage<void>(
+          name: AppScreens.home,
+          // 1
+          path: '/home/:tab(home|screen1|screen2)',
+          pageBuilder: (context, state) {
+            // 2
+            final tab = state.params['tab']!;
+            return MaterialPage<void>(
               key: state.pageKey,
-              child: const PersonalInfo(),
-            ),
-          ),
-          GoRoute(
-            name: AppScreens.profileSignInInfo,
-            path: 'signin-info',
-            pageBuilder: (context, state) => MaterialPage<void>(
-              key: state.pageKey,
-              child: const SignInInfo(),
-            ),
-          ),
-          GoRoute(
-            name: AppScreens.profileMoreInfo,
-            path: 'more-info',
-            pageBuilder: (context, state) => MaterialPage<void>(
-              key: state.pageKey,
-              child: const MoreInfo(),
-            ),
-          ),*/
-        ],
+              // 3
+              child: HomeScreen(tab: tab),
+            );
+          },
+          routes: []),
+      GoRoute(
+        name: AppScreens.profile,
+        path: '/profile',
+        pageBuilder: (context, state) => MaterialPage<void>(
+          key: state.pageKey,
+          child: const ProfileScreen(),
+        ),
       ),
       // forwarding routes to remove the need to put the 'tab' param in the code
-// 1
       GoRoute(
-        path: '/shop',
+        path: '/home',
         redirect: (state) =>
-            state.namedLocation(AppScreens.home, params: {'tab': 'shop'}),
+            state.namedLocation(AppScreens.home, params: {'tab': 'home'}),
       ),
       GoRoute(
-        path: '/cart',
+        path: '/screen1',
         redirect: (state) =>
-            state.namedLocation(AppScreens.home, params: {'tab': 'cart'}),
+            state.namedLocation(AppScreens.home, params: {'tab': 'screen1'}),
       ),
       GoRoute(
-        path: '/profile',
+        path: '/screen2',
         redirect: (state) =>
-            state.namedLocation(AppScreens.home, params: {'tab': 'profile'}),
+            state.namedLocation(AppScreens.home, params: {'tab': 'screen2'}),
       ),
-      GoRoute(
-        name: AppScreens.profilePersonal,
-        path: '/profile-personal',
-        redirect: (state) => state.namedLocation(
-          AppScreens.profilePersonal,
-          // 4
-          params: {'tab': 'profile'},
-        ),
-      ),
-      GoRoute(
-        name: AppScreens.profileSignInInfo,
-        path: '/profile-signin-info',
-        redirect: (state) => state.namedLocation(
-          AppScreens.profileSignInInfo,
-          params: {'tab': 'profile'},
-        ),
-      ),
-      /*GoRoute(
-        name: AppScreens.profileMoreInfo,
-        path: '/profile-more-info',
-        redirect: (state) => state.namedLocation(
-          AppScreens.profileMoreInfo,
-          params: {'tab': 'profile'},
-        ),
-      ),*/
     ],
     errorPageBuilder: (context, state) => MaterialPage<void>(
       key: state.pageKey,
@@ -169,48 +123,55 @@ class AppRouter {
       // Root route (HomeScreen)
       final rootLoc = state.namedLocation(AppScreens.rootRoute);
 
-      final signedIn = appState.signInState;
+      /*
+      * Must always check that weren't already on the screen redirecting to.
+      * i.e
+      * if redirecting to the splash screen, we must not be on the splash screen
+      * if redirecting to the sign in screen, we must not be on the sign in screen
+      * etc.
+      * This to avoid loop redirects.
+      */
+
       // while the app is initializing display the SplashScreen
       final isInitialized = appState.initialized;
-      if (!isInitialized && !splashScreen && !signedIn) {
+      if (!isInitialized && !splashScreen) {
         print('---redirecting to splash screen---');
         return splashScreenLoc;
       }
 
-      final isOnboardingComplete = appState.onboarding;
       // new install
+      // Redirect to onboarding
+      final isOnboardingComplete = appState.onboarding;
       if (isInitialized && !isOnboardingComplete && !onboardingScreen) {
         print('---redirecting to onboarding screen---');
         return onboardingScreenLoc;
       }
 
-      // when user is done with onboarding redirect to signup
+      // new install/user
+      // when new user is done with onboarding redirect to signup
       if (isInitialized &&
           isOnboardingComplete &&
           onboardingScreen &&
-          !signedIn) {
+          !signingUpScreen) {
         print('---redirecting to signUp screen---');
         return signUpScreenLoc;
       }
 
-      if (isInitialized && isOnboardingComplete && !signedIn) {
+      // existing user
+      // user isn't signedIn redirect to signIn
+      final signedIn = appState.signInState;
+      if (isInitialized &&
+          isOnboardingComplete &&
+          !signedIn &&
+          !(signingUpScreen || signInScreen)) {
         print('---redirecting to signUp screen---');
         return signInScreenLoc;
       }
 
-      // if (isInitialized &&
-      //     isOnboardingComplete &&
-      //     !onboardingScreen &&
-      //     !signedIn &&
-      //     !signingUpScreen) {
-      //   print('---redirecting to signUp screen---');
-      //   return signInScreenLoc;
-      // }
-
       // If signed in redirect to home screen
-      if (isOnboardingComplete &&
+      if (isInitialized &&
           signedIn &&
-          (signInScreen || signingUpScreen)) {
+          (splashScreen || signInScreen || signingUpScreen)) {
         print('---redirecting to root screen---');
         return rootLoc;
       }

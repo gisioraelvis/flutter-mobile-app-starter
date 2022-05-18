@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';
+import '../../utils/validators.dart';
 
-Widget buildTextField(String hintText) {
-  return TextField(
+Widget buildEmailInputField(
+    String hintText, TextEditingController emailController) {
+  return TextFormField(
     cursorColor: rwColor,
+    keyboardType: TextInputType.emailAddress,
+    controller: emailController,
+    validator: (emailController) => Validators.isValidEmail(emailController),
     decoration: InputDecoration(
       border: const OutlineInputBorder(
         borderSide: BorderSide(

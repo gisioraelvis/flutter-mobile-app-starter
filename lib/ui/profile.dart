@@ -25,13 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              buildTextfield("Username"),
+              buildTextField("Username"),
               const SizedBox(height: 16),
-              buildTextfield("Phone Number"),
+              buildTextField("Phone Number"),
               const SizedBox(height: 16),
-              buildTextfield("Email"),
+              buildTextField("Email"),
               const SizedBox(height: 16),
-              buildTextfield('Password'),
+              buildTextField('Password'),
               const SizedBox(height: 16),
               buildButton(
                 context,

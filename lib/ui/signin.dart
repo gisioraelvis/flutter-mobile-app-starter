@@ -31,9 +31,9 @@ class SignInScreen extends StatelessWidget {
                 child: FlutterLogo(),
               ),
               const SizedBox(height: 16),
-              buildTextfield(email ?? 'Enter email'),
+              buildTextField(email ?? 'Enter email'),
               const SizedBox(height: 16),
-              buildTextfield('Enter password'),
+              buildTextField('Enter password'),
               const SizedBox(height: 16),
               buildButton(
                 context,

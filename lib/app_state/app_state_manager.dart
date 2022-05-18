@@ -22,21 +22,21 @@ class AppState with ChangeNotifier {
   }
 
   set onboarding(bool value) {
-    sharedPreferences.setBool(ONBOARDING_KEY, value);
+    sharedPreferences.setBool(onboardingKey, value);
     _onboarding = value;
     notifyListeners();
   }
 
   set signInState(bool state) {
-    sharedPreferences.setBool(SIGNIN_KEY, state);
+    sharedPreferences.setBool(signInKey, state);
     _signInState = state;
     print("----set signInState: $state ----");
     notifyListeners();
   }
 
   Future<void> onAppStart() async {
-    _onboarding = sharedPreferences.getBool(ONBOARDING_KEY) ?? false;
-    _signInState = sharedPreferences.getBool(SIGNIN_KEY) ?? false;
+    _onboarding = sharedPreferences.getBool(onboardingKey) ?? false;
+    _signInState = sharedPreferences.getBool(signInKey) ?? false;
 
     print("---initialized: $_initialized---");
     print("---onboarding: $_onboarding---");
@@ -45,7 +45,7 @@ class AppState with ChangeNotifier {
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
 
-    await Future.delayed(const Duration(seconds: 5));
+    //await Future.delayed(const Duration(seconds: 5));
     _initialized = true;
     notifyListeners();
   }

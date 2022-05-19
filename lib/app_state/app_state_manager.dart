@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +46,7 @@ class AppState with ChangeNotifier {
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
 
-    //await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
     _initialized = true;
     notifyListeners();
   }

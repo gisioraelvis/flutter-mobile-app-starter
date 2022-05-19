@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
@@ -62,9 +61,14 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       buildPhoneNumberInputField(
-                        context,
-                        _phoneNumberController,
-                      ),
+                          context, _phoneNumberController, (phoneNumber) {
+                        String countryCode = phoneNumber.countryCode;
+                        // strip any leading 0's
+                        String stripedPhoneNumber =
+                            phoneNumber.number.replaceAll(RegExp(r'^0+'), '');
+                        formatedCompletePhoneNumber =
+                            countryCode + stripedPhoneNumber;
+                      }),
                       const SizedBox(height: 16),
                       PasswordInputField(
                         hintText: 'Enter Password',
@@ -104,41 +108,6 @@ class SignUpScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildPhoneNumberInputField(BuildContext context, controller) {
-    String stripedPhoneNumber;
-    String countryCode;
-
-    return Column(
-      children: [
-        IntlPhoneField(
-          controller: controller,
-          initialCountryCode: 'KE',
-          decoration: const InputDecoration(
-            hintText: "Enter Phone Number",
-            helperText: "e.g 0712345678",
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-                width: 1.0,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue),
-            ),
-            hintStyle: TextStyle(height: 0.5),
-          ),
-          onChanged: (phoneNumber) {
-            countryCode = phoneNumber.countryCode;
-            // strip any leading 0's
-            stripedPhoneNumber =
-                phoneNumber.number.replaceAll(RegExp(r'^0+'), '');
-            formatedCompletePhoneNumber = countryCode + stripedPhoneNumber;
-          },
-        ),
-      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
+import '../services/auth.dart';
 import 'widgets/widgets.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -27,15 +28,25 @@ class SignInScreen extends StatelessWidget {
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
         // print email, phoneNumber and password
-        print(
-          '{email: ${_emailController.text},\n'
-          'password: ${_passwordController.text}}',
-        );
+        String email = _emailController.text;
+        String password = _passwordController.text;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submitted')),
-        );
-        Provider.of<AppState>(context, listen: false).signInState = true;
+        AuthService authUser = AuthService();
+        Future<Map<String, dynamic>> res = authUser.signIn(email, password);
+
+        res.then((value) {
+          if (value['status'] == 'success') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Successfully signed in.')),
+            );
+            Provider.of<AppState>(context, listen: false).signInState = true;
+          } else {
+            print(value['data']['message']);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("${value['data']['message']}"),
+            ));
+          }
+        });
       }
     }
 

@@ -10,6 +10,7 @@ Widget buildEmailInputField(
     keyboardType: TextInputType.emailAddress,
     controller: emailController,
     validator: (emailController) => Validators.isValidEmail(emailController),
+    autovalidateMode: AutovalidateMode.onUserInteraction,
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.email),
       border: const OutlineInputBorder(

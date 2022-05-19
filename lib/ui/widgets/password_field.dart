@@ -23,6 +23,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
       controller: widget.passwordController,
       validator: (passwordController) =>
           Validators.isValidPassword(passwordController),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.lock),
         border: const OutlineInputBorder(

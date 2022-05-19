@@ -30,6 +30,7 @@ class _ConfirmPasswordInputField extends State<ConfirmPasswordInputField> {
         widget.passwordController.text,
         confirmPasswordController,
       ),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.lock),
         border: const OutlineInputBorder(

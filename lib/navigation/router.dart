@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../app_state/app_state_manager.dart';
-import 'routes.dart';
 import '../ui/screens.dart';
+import 'routes.dart';
 
 class AppRouter {
   final AppState appState;
@@ -54,7 +54,7 @@ class AppRouter {
         path: '/signup',
         pageBuilder: (context, state) => MaterialPage<void>(
           key: state.pageKey,
-          child: const SignUpScreen(),
+          child: SignUpScreen(),
         ),
       ),
       // Home route and children

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 
+import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
 class SignUpScreen extends StatelessWidget {
-  final String? email;
-  final String? password;
+  SignUpScreen({Key? key}) : super(key: key);
 
-  const SignUpScreen({
-    Key? key,
-    this.email,
-    this.password,
-  }) : super(key: key);
-
+  String? formatedCompletePhoneNumber;
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -28,15 +25,15 @@ class SignUpScreen extends StatelessWidget {
         // you'd often call a server or save the information in a database.
         // print email, phoneNumber and password
         print(
-          'email: ${_emailController.text}, '
-          'phone: ${_phoneNumberController.text}, '
-          'password: ${_passwordController.text}',
+          '{email: ${_emailController.text},\n'
+          'phone: $formatedCompletePhoneNumber,\n'
+          'password: ${_passwordController.text}}',
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Processing Data')),
+          const SnackBar(content: Text('Submitted')),
         );
-        // Provider.of<AppState>(context, listen: false).signInState = true;
+        Provider.of<AppState>(context, listen: false).signInState = true;
       }
     }
 
@@ -64,9 +61,9 @@ class SignUpScreen extends StatelessWidget {
                         _emailController,
                       ),
                       const SizedBox(height: 16),
-                      PhoneNumberInputField(
-                        hintText: "Enter Phone Number",
-                        controller: _phoneNumberController,
+                      buildPhoneNumberInputField(
+                        context,
+                        _phoneNumberController,
                       ),
                       const SizedBox(height: 16),
                       PasswordInputField(
@@ -107,6 +104,40 @@ class SignUpScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildPhoneNumberInputField(BuildContext context, controller) {
+    String stripedPhoneNumber;
+    String countryCode;
+
+    return Column(
+      children: [
+        IntlPhoneField(
+          controller: controller,
+          initialCountryCode: 'KE',
+          decoration: const InputDecoration(
+            hintText: "Enter Phone Number",
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.blue,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+            hintStyle: TextStyle(height: 0.5),
+          ),
+          onChanged: (phoneNumber) {
+            countryCode = phoneNumber.countryCode;
+            // strip any leading 0's
+            stripedPhoneNumber =
+                phoneNumber.number.replaceAll(RegExp(r'^0+'), '');
+            formatedCompletePhoneNumber = countryCode + stripedPhoneNumber;
+          },
+        ),
+      ],
     );
   }
 }

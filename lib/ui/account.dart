@@ -22,15 +22,6 @@ class _UserProfileState extends State<AccountScreen> {
         ),
         body: Column(
           children: [
-            const SizedBox(
-              height: 150,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  child: Text('E', style: TextStyle(fontSize: 50)),
-                ),
-              ),
-            ),
             Expanded(
                 child: Card(
               elevation: 10,

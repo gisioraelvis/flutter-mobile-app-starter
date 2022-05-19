@@ -118,6 +118,7 @@ class SignUpScreen extends StatelessWidget {
           initialCountryCode: 'KE',
           decoration: const InputDecoration(
             hintText: "Enter Phone Number",
+            helperText: "e.g 0712345678",
             border: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.blue,

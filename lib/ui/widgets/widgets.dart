@@ -1,5 +1,6 @@
 export 'button.dart';
-export 'email_input_field.dart';
-export 'password_input_field.dart';
-export 'phone_input_field.dart';
-export 'textField.dart';
+export 'confirm_password_field.dart';
+export 'email_field.dart';
+export 'password_field.dart';
+export 'phone_field.dart';
+export 'text_field.dart';

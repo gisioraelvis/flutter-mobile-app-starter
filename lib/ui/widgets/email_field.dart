@@ -11,6 +11,7 @@ Widget buildEmailInputField(
     controller: emailController,
     validator: (emailController) => Validators.isValidEmail(emailController),
     decoration: InputDecoration(
+      prefixIcon: const Icon(Icons.email),
       border: const OutlineInputBorder(
         borderSide: BorderSide(
           color: Colors.blue,

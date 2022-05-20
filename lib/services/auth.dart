@@ -11,10 +11,10 @@ import '../api_endpoints.dart';
 * */
 
 class AuthService {
-  Future<Map<String, dynamic>> signIn(String email, String password) async {
+  Future<Map<String, dynamic>?> signIn(String email, String password) async {
     var url = Uri.parse(APIEndPoints.signIn);
 
-    var data = jsonEncode({'username': email, 'password': password});
+    var data = jsonEncode({'email': email, 'password': password});
 
     try {
       Response res = await post(

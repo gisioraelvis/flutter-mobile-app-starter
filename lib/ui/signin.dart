@@ -7,46 +7,71 @@ import '../navigation/routes.dart';
 import '../services/auth.dart';
 import 'widgets/widgets.dart';
 
-class SignInScreen extends StatelessWidget {
-  final String? email;
-  final String? password;
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
 
-  const SignInScreen({
-    Key? key,
-    this.email,
-    this.password,
-  }) : super(key: key);
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  bool _isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-
     void signInUser(BuildContext context) {
       if (_formKey.currentState!.validate()) {
-        // If the form is valid, display a snackbar. In the real world,
-        // you'd often call a server or save the information in a database.
-        // print email, phoneNumber and password
         String email = _emailController.text;
         String password = _passwordController.text;
 
         AuthService authUser = AuthService();
-        Future<Map<String, dynamic>> res = authUser.signIn(email, password);
+        Future<Map<String, dynamic>?> res = authUser.signIn(email, password);
+        // while waiting for res set loading to true
+        setState(() {
+          _isLoading = true;
+        });
 
         res.then((value) {
-          if (value['status'] == 'success') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Successfully signed in.')),
-            );
+          setState(() {
+            _isLoading = false;
+          });
+          if (value!['status'] == 'success') {
+            print("---------Success: $value---------");
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Successfully signed in...'),
+              backgroundColor: Colors.green,
+            ));
             Provider.of<AppState>(context, listen: false).signInState = true;
           } else {
-            print(value['data']['message']);
+            print("---------Error: $value---------");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("${value['data']['message']}"),
+              content: Text("${value['data']}"),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
             ));
           }
         });
+
+        // Timeout of 10s
+        // if res is null after 10s set loading to false
+        // scaffold a snackbar with Timeout
+
+        res.timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            setState(() {
+              _isLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Timeout"),
+              backgroundColor: Colors.red,
+            ));
+            return null;
+          },
+        );
       }
     }
 
@@ -79,11 +104,17 @@ class SignInScreen extends StatelessWidget {
                         passwordController: _passwordController,
                       ),
                       const SizedBox(height: 16),
-                      buildButton(
-                        context,
-                        "Sign In",
-                        () => signInUser(context),
-                      ),
+                      // buildButton( context,"Sign In", () => signInUser(context),),
+                      // while loading show loading indicator over button(instead of text)
+                      // while loading disable button
+                      // else show sign in button
+                      _isLoading
+                          ? buildLoadingButton(context)
+                          : buildButton(
+                              context,
+                              "Sign In",
+                              () => signInUser(context),
+                            ),
                     ],
                   ),
                 ),

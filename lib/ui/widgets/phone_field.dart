@@ -3,7 +3,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 Widget buildPhoneNumberInputField(
-    BuildContext context, controller, void Function(PhoneNumber) onChanged) {
+    BuildContext context, controller, void Function(PhoneNumber)? onChanged) {
   return Column(
     children: [
       IntlPhoneField(

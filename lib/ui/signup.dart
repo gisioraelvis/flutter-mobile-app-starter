@@ -6,10 +6,16 @@ import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   String? formatedCompletePhoneNumber;
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -61,14 +67,19 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       buildPhoneNumberInputField(
-                          context, _phoneNumberController, (phoneNumber) {
-                        String countryCode = phoneNumber.countryCode;
-                        // strip any leading 0's
-                        String stripedPhoneNumber =
-                            phoneNumber.number.replaceAll(RegExp(r'^0+'), '');
-                        formatedCompletePhoneNumber =
-                            countryCode + stripedPhoneNumber;
-                      }),
+                        context,
+                        _phoneNumberController,
+                        // Strip the leading 0 from the phone number e.g 0705640212 to 705640212
+                        // Then format the phone number to the international format i.e +254705640212
+                        (phoneNumber) {
+                          String countryCode = phoneNumber.countryCode;
+                          // strip any leading 0's
+                          String stripedPhoneNumber =
+                              phoneNumber.number.replaceAll(RegExp(r'^0+'), '');
+                          formatedCompletePhoneNumber =
+                              countryCode + stripedPhoneNumber;
+                        },
+                      ),
                       const SizedBox(height: 16),
                       PasswordInputField(
                         hintText: 'Enter Password',

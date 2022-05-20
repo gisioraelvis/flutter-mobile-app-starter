@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
-import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
@@ -26,19 +24,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     void signUpUser(BuildContext context) {
       if (_formKey.currentState!.validate()) {
+        print({
+          'email': _emailController.text,
+          'phoneNumber': formatedCompletePhoneNumber,
+          'password': _passwordController.text,
+        });
         // If the form is valid, display a snackbar. In the real world,
         // you'd often call a server or save the information in a database.
         // print email, phoneNumber and password
-        print(
-          '{email: ${_emailController.text},\n'
-          'phone: $formatedCompletePhoneNumber,\n'
-          'password: ${_passwordController.text}}',
-        );
-
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submitted')),
+          const SnackBar(content: Text('Signing up...')),
         );
-        Provider.of<AppState>(context, listen: false).signInState = true;
+        //Provider.of<AppState>(context, listen: false).signInState = true;
       }
     }
 

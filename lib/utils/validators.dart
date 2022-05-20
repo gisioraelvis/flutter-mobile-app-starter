@@ -13,8 +13,10 @@ class Validators {
     if (value == null || value.isEmpty) {
       return 'Required';
     }
+    return null;
   }
 
+  // required(use required function) and matches the _emailRegExp
   static isValidEmail(String? email) {
     if (email == null || email.isEmpty) {
       return 'Required';
@@ -27,7 +29,6 @@ class Validators {
   }
 
   static isValidPassword(String? password) {
-    print('--------password: $password --------');
     if (password == null || password.isEmpty) {
       return 'Required';
     }
@@ -44,7 +45,6 @@ class Validators {
 
   // confirm password validator
   static confirmPasswordMatch(String? password, String? confirmPassword) {
-    print('-------confirmPassword: $confirmPassword ----------------');
     if (confirmPassword == null || confirmPassword.isEmpty) {
       return 'Required';
     }

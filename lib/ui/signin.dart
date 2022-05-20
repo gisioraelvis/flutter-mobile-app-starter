@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
-import '../services/auth.dart';
 import 'widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -27,51 +26,68 @@ class _SignInScreenState extends State<SignInScreen> {
         String email = _emailController.text;
         String password = _passwordController.text;
 
-        AuthService authUser = AuthService();
-        Future<Map<String, dynamic>?> res = authUser.signIn(email, password);
-        // while waiting for res set loading to true
         setState(() {
           _isLoading = true;
         });
 
-        res.then((value) {
+        // delay of 3s to simulate a long running operation then set loading to false
+        Future.delayed(const Duration(seconds: 3), () {
           setState(() {
             _isLoading = false;
           });
-          if (value!['status'] == 'success') {
-            print("---------Success: $value---------");
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Successfully signed in...'),
-              backgroundColor: Colors.green,
-            ));
-            Provider.of<AppState>(context, listen: false).signInState = true;
-          } else {
-            print("---------Error: $value---------");
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("${value['data']}"),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 5),
-            ));
-          }
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Successfully signed in...'),
+            backgroundColor: Colors.blue,
+          ));
+          Provider.of<AppState>(context, listen: false).signInState = true;
         });
 
-        // Timeout of 10s
-        // if res is null after 10s set loading to false
-        // scaffold a snackbar with Timeout
-
-        res.timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            setState(() {
-              _isLoading = false;
-            });
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Timeout"),
-              backgroundColor: Colors.red,
-            ));
-            return null;
-          },
-        );
+        // AuthService authUser = AuthService();
+        // Future<Map<String, dynamic>?> res = authUser.signIn(email, password);
+        // // while waiting for res set loading to true
+        // setState(() {
+        //   _isLoading = true;
+        // });
+        //
+        // res.then((value) {
+        //   setState(() {
+        //     _isLoading = false;
+        //   });
+        //   if (value!['status'] == 'success') {
+        //     print("---------Success: $value---------");
+        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //       content: Text('Successfully signed in...'),
+        //       backgroundColor: Colors.green,
+        //     ));
+        //     Provider.of<AppState>(context, listen: false).signInState = true;
+        //   } else {
+        //     print("---------Error: $value---------");
+        //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //       content: Text("${value['data']}"),
+        //       backgroundColor: Colors.red,
+        //       duration: const Duration(seconds: 5),
+        //     ));
+        //   }
+        // });
+        //
+        // // Timeout of 10s
+        // // if res is null after 10s set loading to false
+        // // scaffold a snackbar with Timeout
+        //
+        // res.timeout(
+        //   const Duration(seconds: 5),
+        //   onTimeout: () {
+        //     setState(() {
+        //       _isLoading = false;
+        //     });
+        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //       content: Text("Timeout"),
+        //       backgroundColor: Colors.red,
+        //     ));
+        //     return null;
+        //   },
+        // );
       }
     }
 

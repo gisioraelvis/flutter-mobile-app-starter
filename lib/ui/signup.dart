@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../app_state/app_state_manager.dart';
 import '../navigation/routes.dart';
 import 'widgets/widgets.dart';
 
@@ -12,16 +14,16 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  bool _isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   String? formatedCompletePhoneNumber;
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _emailController = TextEditingController();
-    final _phoneNumberController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _confirmPasswordController = TextEditingController();
-
     void signUpUser(BuildContext context) {
       if (_formKey.currentState!.validate()) {
         print({
@@ -29,13 +31,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'phoneNumber': formatedCompletePhoneNumber,
           'password': _passwordController.text,
         });
-        // If the form is valid, display a snackbar. In the real world,
-        // you'd often call a server or save the information in a database.
-        // print email, phoneNumber and password
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Signing up...')),
-        );
-        //Provider.of<AppState>(context, listen: false).signInState = true;
+
+        setState(() {
+          _isLoading = true;
+        });
+        // delay of 3s to simulate a long running operation then set loading to false
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            _isLoading = false;
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Successfully signed Up...'),
+            backgroundColor: Colors.blue,
+          ));
+          Provider.of<AppState>(context, listen: false).signInState = true;
+        });
       }
     }
 
@@ -89,11 +100,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         confirmPasswordController: _confirmPasswordController,
                       ),
                       const SizedBox(height: 16),
-                      buildButton(
-                        context,
-                        "Sign up",
-                        () => signUpUser(context),
-                      ),
+                      _isLoading
+                          ? buildLoadingButton(context)
+                          : buildButton(
+                              context,
+                              "Sign In",
+                              () => signUpUser(context),
+                            ),
                     ],
                   ),
                 ),

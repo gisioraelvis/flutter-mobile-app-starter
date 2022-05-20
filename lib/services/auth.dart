@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../api_endpoints.dart';
+import '../models/user.dart';
 
 /*
 * signin
@@ -14,7 +15,9 @@ class AuthService {
   Future<Map<String, dynamic>?> signIn(String email, String password) async {
     var url = Uri.parse(APIEndPoints.signIn);
 
-    var data = jsonEncode({'email': email, 'password': password});
+    var data = jsonEncode(
+      User(email: email, password: password).toJson(),
+    );
 
     try {
       Response res = await post(
